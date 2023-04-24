@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 struct Node {
     int user_id;
@@ -94,6 +95,27 @@ int average(struct Node** head_ref, int par_item_id){
     return sum/node_count;
 }
 
+void rating(struct Node** head_ref, int par_user_id, int par_item_id){
+
+    struct Node *temp = *head_ref, *prev;
+
+    bool isPrinted = false;
+
+    while (temp != NULL) {
+        if(temp->user_id == par_user_id && temp->item_id == par_item_id){
+            printf("Customer rating (%d, %d) is: %d \n", par_user_id, par_item_id, temp->rating);
+            isPrinted = true;
+            break;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if(!isPrinted) {
+        printf("Customer rating (%d, %d) does not exist. \n", par_user_id, par_item_id);
+    }
+}
+
 int main()
 {
     struct Node* head = NULL;
@@ -106,13 +128,15 @@ int main()
     //head->next = second;
 
     append(&head, 1, 1, 1);
-    append(&head, 2, 2, 2);
+    append(&head, 2, 2, 3);
     append(&head, 4, 2, 4);
     append(&head, 3, 2, 6);
     append(&head, 3, 3, 3);
     deleteNode(&head, 1, 1);
 
     printf("%d\n", average(&head,2));
+
+    rating(&head, 2, 2);
 
     printList(head);
 
