@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 struct Node {
     int user_id;
@@ -66,6 +67,7 @@ void append(struct Node** head_ref, int par_user_id, int par_item_id, int par_ra
     if (*head_ref == NULL)
     {
         *head_ref = new_node;
+        printf("Customer rating (%d, %d) is added succesful \n", par_user_id, par_item_id);
         return;
     }
 
@@ -75,27 +77,36 @@ void append(struct Node** head_ref, int par_user_id, int par_item_id, int par_ra
 
     /* 6. Change the next of last node */
     last->next = new_node;
+
+    printf("Customer rating (%d, %d) is added succesful \n", par_user_id, par_item_id);
     return;
 }
 
 int average(struct Node** head_ref, int par_item_id){
     int sum = 0;
     int node_count = 0;
+    int item_id_found = 0;
     struct Node *temp = *head_ref, *prev;
 
     while (temp != NULL) {
         if(temp->item_id == par_item_id){
+            item_id_found = 1;
             sum += temp->rating;
             node_count++;
         }
         prev = temp;
         temp = temp->next;
     }
+    if(item_id_found == 1){
+        return sum/node_count;
+    }
+    else{
+        return 0;
+    }
 
-    return sum/node_count;
 }
 
-void rating(struct Node** head_ref, int par_user_id, int par_item_id){
+void rating_function(struct Node** head_ref, int par_user_id, int par_item_id){
 
     struct Node *temp = *head_ref, *prev;
 
@@ -112,33 +123,59 @@ void rating(struct Node** head_ref, int par_user_id, int par_item_id){
     }
 
     if(!isPrinted) {
-        printf("Customer rating (%d, %d) does not exist. \n", par_user_id, par_item_id);
+        printf("Customer rating (%d, %d) is: %d \n", par_user_id, par_item_id, 0);
     }
 }
 
 int main()
 {
     struct Node* head = NULL;
+    char input[20];
+    int user_id;
+    int item_id;
+    int rating;
 
-    //head = (struct Node*)malloc(sizeof(struct Node));
 
-    //head->user_id = 1;
-    //head->item_id = 1;
-    //head->rating = 1;
-    //head->next = second;
+    while (1) {
+        scanf("%19[^\n]", &input);
+        char *p = strtok(input, " ");
+        char *array[4];
+        int i = 0;
 
-    append(&head, 1, 1, 1);
-    append(&head, 2, 2, 3);
-    append(&head, 4, 2, 4);
-    append(&head, 3, 2, 6);
-    append(&head, 3, 3, 3);
-    deleteNode(&head, 1, 1);
+        while (p != NULL){
+            array[i++] = p;
+            p = strtok(NULL, " ");
+        }
 
-    printf("%d\n", average(&head,2));
+        if(strcmp(array[0], "INSERT") == 0){
+            sscanf(array[1], "%d", &user_id);
+            sscanf(array[2], "%d", &item_id);
+            sscanf(array[3], "%d", &rating);
+            append(&head, user_id, item_id, rating);
+        }
+        else if(strcmp(array[0], "RATING") == 0){
+            sscanf(array[1], "%d", &user_id);
+            sscanf(array[2], "%d", &item_id);
+            rating_function(&head, user_id, item_id);
+        }
+        else if(strcmp(array[0], "AVERAGE") == 0){
+            sscanf(array[1], "%d", &item_id);
+            average(&head, item_id);
+        }
+        else if(strcmp(array[0], "REMOVE") == 0){
+            sscanf(array[1], "%d", &user_id);
+            sscanf(array[2], "%d", &item_id);
+            deleteNode(&head, user_id, item_id);
+        }
 
-    rating(&head, 2, 2);
+        /*
+        scanf("%s %d %d %d", &input, &user_id, &item_id, &rating);
+        append(&head, user_id, item_id, rating);
+        printList(head);
+        */
+    }
 
-    printList(head);
+    //printList(head);
 
     return 0;
 }
