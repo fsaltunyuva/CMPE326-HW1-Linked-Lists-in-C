@@ -4,16 +4,16 @@
 #include <string.h>
 
 struct Node {
-    int user_id;
-    int item_id;
-    int rating;
+    double user_id;
+    double item_id;
+    double rating;
     struct Node* next;
 };
 
 void printList(struct Node* n)
 {
     while (n != NULL) {
-        printf("User ID:%d\tItem ID:%d\tRating:%d \n", n->user_id, n->item_id, n->rating);
+        printf("User ID:%.1lf\tItem ID:%.1lf\tRating:%.1lf \n", n->user_id, n->item_id, n->rating);
         n = n->next;
     }
 }
@@ -98,8 +98,8 @@ void append(struct Node** head_ref, int par_user_id, int par_item_id, int par_ra
     return;
 }
 
-int average(struct Node** head_ref, int par_item_id){
-    int sum = 0;
+double average(struct Node** head_ref, int par_item_id){
+    double sum = 0;
     int node_count = 0;
     int item_id_found = 0;
     struct Node *temp = *head_ref;
@@ -114,7 +114,7 @@ int average(struct Node** head_ref, int par_item_id){
     }
 
     if(item_id_found == 1){
-        printf("Average rating (%d) is: %d \n", par_item_id, sum/node_count);
+        printf("Average rating (%d) is: %.1lf \n", par_item_id, sum/node_count);
         return sum/node_count;
     }
     else{
@@ -131,7 +131,7 @@ void rating_function(struct Node** head_ref, int par_user_id, int par_item_id){
 
     while (temp != NULL) {
         if(temp->user_id == par_user_id && temp->item_id == par_item_id){
-            printf("Customer rating (%d, %d) is: %d \n", par_user_id, par_item_id, temp->rating);
+            printf("Customer rating (%d, %d) is: %.1lf \n", par_user_id, par_item_id, temp->rating);
             isPrinted = true;
             break;
         }
