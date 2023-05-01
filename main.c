@@ -13,7 +13,7 @@ struct Node {
 void printList(struct Node* n)
 {
     while (n != NULL) {
-        printf("User ID:%d Item ID:%d Rating:%d \n", n->user_id, n->item_id, n->rating);
+        printf("User ID:%d\tItem ID:%d\tRating:%d \n", n->user_id, n->item_id, n->rating);
         n = n->next;
     }
 }
@@ -40,6 +40,24 @@ void deleteNode(struct Node** head_ref, int par_user_id, int par_item_id)
 
     free(temp);
 }
+/*
+void update_data(struct Node** head_ref, struct Node** par_old, struct Node** par_new) {
+    struct Node *curr = *head_ref;
+    struct Node *old = *par_old;
+    struct Node *new = *par_new;
+
+    while(curr->next!=NULL) {
+        if(curr->rating == old->rating) {
+            curr->rating = new->rating;
+            printf("\n%d found , replaced with %d\n", old, new);
+            return;
+        }
+        curr = curr->next;
+    }
+
+    printf("%d does not exist in the list\n", old);
+}
+ */
 
 void append(struct Node** head_ref, int par_user_id, int par_item_id, int par_rating)
 {
@@ -55,16 +73,28 @@ void append(struct Node** head_ref, int par_user_id, int par_item_id, int par_ra
     if (*head_ref == NULL)
     {
         *head_ref = new_node;
-        printf("Customer rating (%d, %d) is added succesful \n", par_user_id, par_item_id);
+        printf("Customer rating (%d, %d) is added succesful\n", par_user_id, par_item_id);
         return;
     }
 
-    while (last->next != NULL)
+    int update_condition = 0;
+    while (last->next != NULL){
+        if(last->user_id == par_user_id && last->item_id == par_item_id){
+            update_condition = 1;
+            last->rating = par_rating;
+            printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
+            break;
+            //update_data(&*head_ref, &last, &new_node);
+        }
         last = last->next;
+    }
 
-    last->next = new_node;
+    if(update_condition != 1){ //If a value updated, do not try to add the element to the end
+        last->next = new_node;
 
-    printf("Customer rating (%d, %d) is added succesful \n", par_user_id, par_item_id);
+        printf("Customer rating (%d, %d) is added succesful \n", par_user_id, par_item_id);
+    }
+
     return;
 }
 
@@ -156,6 +186,12 @@ int main()
             deleteNode(&head, user_id, item_id);
             fgets(input, 20, stdin);
         }
+        //DEBUG
+        else if(strcmp(array[0], "PRINT") == 0){
+            printList(head);
+            fgets(input, 20, stdin);
+        }
+        //DEBUG
         else if(strcmp(array[0], "BREAK") == 0){
             break;
         }
