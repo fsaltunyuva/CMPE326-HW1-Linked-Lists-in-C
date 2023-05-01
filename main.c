@@ -92,7 +92,7 @@ void append(struct Node** head_ref, int par_user_id, int par_item_id, int par_ra
     if(update_condition != 1){ //If a value updated, do not try to add the element to the end
         last->next = new_node;
 
-        printf("Customer rating (%d, %d) is added succesful \n", par_user_id, par_item_id);
+        printf("Customer rating (%d, %d) is added succesful\n", par_user_id, par_item_id);
     }
 
     return;
@@ -114,6 +114,7 @@ int average(struct Node** head_ref, int par_item_id){
     }
 
     if(item_id_found == 1){
+        printf("Average rating (%d) is: %d \n", par_item_id, sum/node_count);
         return sum/node_count;
     }
     else{
@@ -177,7 +178,7 @@ int main()
         }
         else if(strcmp(array[0], "AVERAGE") == 0){
             sscanf(array[1], "%d", &item_id);
-            printf("Average rating (%d) is: %d \n",item_id, average(&head, item_id));
+            average(&head, item_id);
             fgets(input, 20, stdin);
         }
         else if(strcmp(array[0], "REMOVE") == 0){
