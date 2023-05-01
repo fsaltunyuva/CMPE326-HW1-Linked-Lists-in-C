@@ -18,7 +18,7 @@ void printList(struct Node* n)
     }
 }
 
-void deleteNode(struct Node** head_ref, double par_user_id, double par_item_id)
+void deleteNode(struct Node** head_ref, int par_user_id, int par_item_id)
 {
     struct Node *temp = *head_ref, *prev;
 
@@ -33,11 +33,13 @@ void deleteNode(struct Node** head_ref, double par_user_id, double par_item_id)
         temp = temp->next;
     }
 
-    if (temp == NULL)
+    if (temp == NULL){
+        printf("Customer rating (%d,%d) does not exit", par_user_id, par_item_id);
         return;
+    }
 
     prev->next = temp->next;
-
+    printf("Customer rating (%d,%d) is removed successful", par_user_id, par_item_id);
     free(temp);
 }
 /*
@@ -141,7 +143,7 @@ void rating_function(struct Node** head_ref, int par_user_id, int par_item_id){
     }
 
     if(!isPrinted) {
-        printf("Customer rating (%d, %d) is: %.1lf \n", par_user_id, par_item_id, 0);
+        printf("Customer rating (%d, %d) is: %.1lf \n", par_user_id, par_item_id, 0.0);
     }
 }
 
