@@ -3,9 +3,9 @@
 #include <stdbool.h>
 #include <string.h>
 
-struct Node {
-    double user_id;
-    double item_id;
+struct Node { //ID'LER HER ZAMAN INTEGER MI OLACAK?
+    int user_id;
+    int item_id;
     double rating;
     struct Node* next;
 };
@@ -13,12 +13,12 @@ struct Node {
 void printList(struct Node* n)
 {
     while (n != NULL) {
-        printf("User ID:%.1lf\tItem ID:%.1lf\tRating:%.1lf \n", n->user_id, n->item_id, n->rating);
+        printf("User ID:%d\tItem ID:%d\tRating:%.1lf \n", n->user_id, n->item_id, n->rating);
         n = n->next;
     }
 }
 
-void deleteNode(struct Node** head_ref, int par_user_id, int par_item_id)
+void deleteNode(struct Node** head_ref, double par_user_id, double par_item_id)
 {
     struct Node *temp = *head_ref, *prev;
 
@@ -59,7 +59,7 @@ void update_data(struct Node** head_ref, struct Node** par_old, struct Node** pa
 }
  */
 
-void append(struct Node** head_ref, int par_user_id, int par_item_id, int par_rating)
+void append(struct Node** head_ref, int par_user_id, int par_item_id, double par_rating)
 {
     struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
     struct Node *last = *head_ref;
@@ -118,6 +118,7 @@ double average(struct Node** head_ref, int par_item_id){
         return sum/node_count;
     }
     else{
+        printf("Average rating (%d) is: %.1lf \n", par_item_id, 0.0);
         return 0;
     }
 
@@ -140,7 +141,7 @@ void rating_function(struct Node** head_ref, int par_user_id, int par_item_id){
     }
 
     if(!isPrinted) {
-        printf("Customer rating (%d, %d) is: %d \n", par_user_id, par_item_id, 0);
+        printf("Customer rating (%d, %d) is: %.1lf \n", par_user_id, par_item_id, 0);
     }
 }
 
@@ -150,7 +151,7 @@ int main()
     char input[20];
     int user_id;
     int item_id;
-    int rating;
+    double rating;
 
     while (1) {
         scanf("%19[^\n]", &input);
@@ -166,7 +167,7 @@ int main()
         if(strcmp(array[0], "INSERT") == 0){
             sscanf(array[1], "%d", &user_id);
             sscanf(array[2], "%d", &item_id);
-            sscanf(array[3], "%d", &rating);
+            sscanf(array[3], "%lf", &rating);
             append(&head, user_id, item_id, rating);
             fgets(input, 20, stdin);
         }
