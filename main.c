@@ -72,7 +72,7 @@ int average(struct Node** head_ref, int par_item_id){
     int sum = 0;
     int node_count = 0;
     int item_id_found = 0;
-    struct Node *temp = *head_ref, *prev;
+    struct Node *temp = *head_ref;
 
     while (temp != NULL) {
         if(temp->item_id == par_item_id){
@@ -80,7 +80,6 @@ int average(struct Node** head_ref, int par_item_id){
             sum += temp->rating;
             node_count++;
         }
-        prev = temp;
         temp = temp->next;
     }
 
@@ -148,7 +147,7 @@ int main()
         }
         else if(strcmp(array[0], "AVERAGE") == 0){
             sscanf(array[1], "%d", &item_id);
-            average(&head, item_id);
+            printf("Average rating (%d) is: %d \n",item_id, average(&head, item_id));
             fgets(input, 20, stdin);
         }
         else if(strcmp(array[0], "REMOVE") == 0){
