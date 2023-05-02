@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 
 struct Node { //ID'LER HER ZAMAN INTEGER MI OLACAK?
@@ -130,19 +129,19 @@ void rating_function(struct Node** head_ref, int par_user_id, int par_item_id){
 
     struct Node *temp = *head_ref, *prev;
 
-    bool isPrinted = false;
+    int isPrinted = 0;
 
     while (temp != NULL) {
         if(temp->user_id == par_user_id && temp->item_id == par_item_id){
             printf("Customer rating (%d, %d) is: %.1lf \n", par_user_id, par_item_id, temp->rating);
-            isPrinted = true;
+            isPrinted = 1;
             break;
         }
         prev = temp;
         temp = temp->next;
     }
 
-    if(!isPrinted) {
+    if(isPrinted == 0) {
         printf("Customer rating (%d, %d) is: %.1lf \n", par_user_id, par_item_id, 0.0);
     }
 }
