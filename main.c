@@ -55,9 +55,6 @@ void append(struct Node **head_ref, int par_user_id, int par_item_id, double par
     if (*head_ref == NULL) {
         *head_ref = new_node;
         printf("Customer rating (%d, %d) is added successful\n", par_user_id, par_item_id);
-
-        printf("CHECK 1\n");
-
         return;
     }
 
@@ -65,44 +62,38 @@ void append(struct Node **head_ref, int par_user_id, int par_item_id, double par
     int head_condition = 0;
     int last_condition = 0;
 
-    if (last->user_id == par_user_id && last->item_id == par_item_id) { //Head update edilmeli mi kontrolü çünkü aşağıdaki while head'e bakmıyor
+    if (temp->user_id == par_user_id && temp->item_id == par_item_id) { //Head update edilmeli mi kontrolü çünkü aşağıdaki while head'e bakmıyor
         update_condition = 1;
         head_condition = 1;
-        last->rating = par_rating;
-        printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
-    }
-
-    while(temp->next != NULL){ //Temp'e sonuncu elemanı yerleştirme
-        temp = temp->next;
-    }
-
-    if (temp->user_id == par_user_id && temp->item_id == par_item_id) { //Sonuncu eleman update edilmeli mi kontrolü çünkü aşağıdaki while sonuncuya bakmıyor
-        update_condition = 1;
-        last_condition = 1;
         temp->rating = par_rating;
         printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
     }
 
-    while (last->next != NULL && head_condition == 0 && last_condition == 0) { //Head ve Sonuncu elemanı atlıyor
-        if (last->user_id == par_user_id && last->item_id == par_item_id) {
-            update_condition = 1;
-            last->rating = par_rating;
-            printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
-
-            printf("CHECK 2\n");
-
-            break;
-        }
-        printf("CHECK 4\n");
+    while(last->next != NULL){ //Temp'e sonuncu elemanı yerleştirme
         last = last->next;
     }
 
+    if (last->user_id == par_user_id && last->item_id == par_item_id && head_condition == 0) { //Sonuncu eleman update edilmeli mi kontrolü çünkü aşağıdaki while sonuncuya bakmıyor
+        update_condition = 1;
+        last_condition = 1;
+        last->rating = par_rating;
+        printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
+    }
+
+    while (temp->next != NULL && head_condition == 0 && last_condition == 0) { //Head ve Sonuncu elemanı atlıyor
+        if (temp->user_id == par_user_id && temp->item_id == par_item_id) {
+            update_condition = 1;
+            temp->rating = par_rating;
+            printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
+            break;
+        }
+        temp = temp->next;
+    }
+
     if (update_condition != 1) { //If a value updated, do not try to add the element to the end
-        last->next = new_node;
+        temp->next = new_node;
 
         printf("Customer rating (%d, %d) is added successful\n", par_user_id, par_item_id);
-
-        printf("CHECK 3\n");
     }
 
     return;
