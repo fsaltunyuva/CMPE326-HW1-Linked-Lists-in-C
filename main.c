@@ -52,7 +52,7 @@ void append(struct Node **head_ref, int par_user_id, int par_item_id, double par
 
     if (*head_ref == NULL) {
         *head_ref = new_node;
-        printf("Customer rating (%d, %d) is added succesful\n", par_user_id, par_item_id);
+        printf("Customer rating (%d, %d) is added successful\n", par_user_id, par_item_id);
         return;
     }
 
@@ -70,7 +70,7 @@ void append(struct Node **head_ref, int par_user_id, int par_item_id, double par
     if (update_condition != 1) { //If a value updated, do not try to add the element to the end
         last->next = new_node;
 
-        printf("Customer rating (%d, %d) is added succesful\n", par_user_id, par_item_id);
+        printf("Customer rating (%d, %d) is added successful\n", par_user_id, par_item_id);
     }
 
     return;
