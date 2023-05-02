@@ -21,6 +21,7 @@ void deleteNode(struct Node **head_ref, int par_user_id, int par_item_id) {
 
     if (temp != NULL && temp->user_id == par_user_id && temp->item_id == par_item_id) {
         *head_ref = temp->next;
+        printf("Customer rating (%d,%d) is removed successful\n", par_user_id, par_item_id);
         free(temp);
         return;
     }
@@ -31,18 +32,19 @@ void deleteNode(struct Node **head_ref, int par_user_id, int par_item_id) {
     }
 
     if (temp == NULL) {
-        printf("Customer rating (%d,%d) does not exit", par_user_id, par_item_id);
+        printf("Customer rating (%d,%d) does not exit\n", par_user_id, par_item_id);
         return;
     }
 
     prev->next = temp->next;
-    printf("Customer rating (%d,%d) is removed successful", par_user_id, par_item_id);
+    printf("Customer rating (%d,%d) is removed successful\n", par_user_id, par_item_id);
     free(temp);
 }
 
 void append(struct Node **head_ref, int par_user_id, int par_item_id, double par_rating) {
     struct Node *new_node = (struct Node *) malloc(sizeof(struct Node));
     struct Node *last = *head_ref;
+    struct Node *temp = *head_ref;
 
     new_node->user_id = par_user_id;
     new_node->item_id = par_item_id;
@@ -53,17 +55,45 @@ void append(struct Node **head_ref, int par_user_id, int par_item_id, double par
     if (*head_ref == NULL) {
         *head_ref = new_node;
         printf("Customer rating (%d, %d) is added successful\n", par_user_id, par_item_id);
+
+        printf("CHECK 1\n");
+
         return;
     }
 
     int update_condition = 0;
-    while (last->next != NULL) {
+    int head_condition = 0;
+    int last_condition = 0;
+
+    if (last->user_id == par_user_id && last->item_id == par_item_id) { //Head update edilmeli mi kontrolü çünkü aşağıdaki while head'e bakmıyor
+        update_condition = 1;
+        head_condition = 1;
+        last->rating = par_rating;
+        printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
+    }
+
+    while(temp->next != NULL){ //Temp'e sonuncu elemanı yerleştirme
+        temp = temp->next;
+    }
+
+    if (temp->user_id == par_user_id && temp->item_id == par_item_id) { //Sonuncu eleman update edilmeli mi kontrolü çünkü aşağıdaki while sonuncuya bakmıyor
+        update_condition = 1;
+        last_condition = 1;
+        temp->rating = par_rating;
+        printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
+    }
+
+    while (last->next != NULL && head_condition == 0 && last_condition == 0) { //Head ve Sonuncu elemanı atlıyor
         if (last->user_id == par_user_id && last->item_id == par_item_id) {
             update_condition = 1;
             last->rating = par_rating;
             printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
+
+            printf("CHECK 2\n");
+
             break;
         }
+        printf("CHECK 4\n");
         last = last->next;
     }
 
@@ -71,6 +101,8 @@ void append(struct Node **head_ref, int par_user_id, int par_item_id, double par
         last->next = new_node;
 
         printf("Customer rating (%d, %d) is added successful\n", par_user_id, par_item_id);
+
+        printf("CHECK 3\n");
     }
 
     return;
