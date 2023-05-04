@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Node { //ID'LER HER ZAMAN INTEGER MI OLACAK?
+struct Node {
     int user_id;
     int item_id;
     double rating;
     struct Node *next;
 };
 
-void printList(struct Node *n) {
+void printList(struct Node *n) { //To debug the program on certain scenarios
     while (n != NULL) {
         printf("User ID:%d\tItem ID:%d\tRating:%.1lf \n", n->user_id, n->item_id, n->rating);
         n = n->next;
@@ -19,29 +19,30 @@ void printList(struct Node *n) {
 void deleteNode(struct Node **head_ref, int par_user_id, int par_item_id) {
     struct Node *temp = *head_ref, *prev;
 
-    if (temp != NULL && temp->user_id == par_user_id && temp->item_id == par_item_id) {
+    if (temp != NULL && temp->user_id == par_user_id && temp->item_id == par_item_id) { //Deletion of the head node
         *head_ref = temp->next;
         printf("Customer rating (%d,%d) is removed successful\n", par_user_id, par_item_id);
         free(temp);
         return;
     }
 
-    while (temp != NULL && temp->user_id != par_user_id && temp->item_id != par_item_id) {
+    while (temp != NULL && temp->user_id != par_user_id &&
+           temp->item_id != par_item_id) { //Assigning prev and temp to the desired place
         prev = temp;
         temp = temp->next;
     }
 
-    if (temp == NULL) {
-        printf("Customer rating (%d,%d) does not exit\n", par_user_id, par_item_id);
+    if (temp == NULL) { //If given node does not exist
+        printf("Customer rating (%d,%d) does not exist\n", par_user_id, par_item_id);
         return;
     }
 
-    prev->next = temp->next;
+    prev->next = temp->next; //Set previous node's next to the deleted node's next
     printf("Customer rating (%d,%d) is removed successful\n", par_user_id, par_item_id);
     free(temp);
 }
 
-void append(struct Node **head_ref, int par_user_id, int par_item_id, double par_rating) {
+void insertNode(struct Node **head_ref, int par_user_id, int par_item_id, double par_rating) {
     struct Node *new_node = (struct Node *) malloc(sizeof(struct Node));
     struct Node *last = *head_ref;
     struct Node *temp = *head_ref;
@@ -52,35 +53,38 @@ void append(struct Node **head_ref, int par_user_id, int par_item_id, double par
 
     new_node->next = NULL;
 
-    if (*head_ref == NULL) {
+    if (*head_ref == NULL) { //If the linked list is empty, add the first node as head
         *head_ref = new_node;
         printf("Customer rating (%d, %d) is added successful\n", par_user_id, par_item_id);
         return;
     }
 
-    int update_condition = 0;
-    int head_condition = 0;
-    int last_condition = 0;
+    int update_condition = 0; //If there is an update it is 1 otherwise 0
+    int head_condition = 0; //If update occurs in the head node it is 1, otherwise 0
+    int last_condition = 0; //If update occurs in the last node it is 1, otherwise 0
 
-    if (temp->user_id == par_user_id && temp->item_id == par_item_id) { //Head update edilmeli mi kontrolü çünkü aşağıdaki while head'e bakmıyor
+    if (temp->user_id == par_user_id && temp->item_id ==
+                                        par_item_id) { //It checks that the condition of updating the head node (The last while loop in this function cannot check head node)
         update_condition = 1;
         head_condition = 1;
         temp->rating = par_rating;
         printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
     }
 
-    while(last->next != NULL){ //Temp'e sonuncu elemanı yerleştirme
+    while (last->next != NULL) { //Assigning the last value to the last node in the instant linked list
         last = last->next;
     }
 
-    if (last->user_id == par_user_id && last->item_id == par_item_id && head_condition == 0) { //Sonuncu eleman update edilmeli mi kontrolü çünkü aşağıdaki while sonuncuya bakmıyor
+    if (last->user_id == par_user_id && last->item_id == par_item_id && head_condition ==
+                                                                        0) { //It checks that the condition of updating the last node (The last while loop in this function cannot check the last node)
         update_condition = 1;
         last_condition = 1;
         last->rating = par_rating;
         printf("Customer rating (%d, %d) is updated\n", par_user_id, par_item_id);
     }
 
-    while (temp->next != NULL && head_condition == 0 && last_condition == 0) { //Head ve Sonuncu elemanı atlıyor
+    while (temp->next != NULL && head_condition == 0 &&
+           last_condition == 0) { //It checks the nodes between the head node and the last node
         if (temp->user_id == par_user_id && temp->item_id == par_item_id) {
             update_condition = 1;
             temp->rating = par_rating;
@@ -124,7 +128,8 @@ double average(struct Node **head_ref, int par_item_id) {
 
 }
 
-void rating_function(struct Node **head_ref, int par_user_id, int par_item_id) { //Named rating_function to prevent confusion with rating variable
+void rating_function(struct Node **head_ref, int par_user_id,
+                     int par_item_id) { //Named rating_function to prevent confusion with rating variable
 
     struct Node *temp = *head_ref;
 
@@ -166,7 +171,7 @@ int main() {
             sscanf(array[1], "%d", &user_id);
             sscanf(array[2], "%d", &item_id);
             sscanf(array[3], "%lf", &rating);
-            append(&head, user_id, item_id, rating);
+            insertNode(&head, user_id, item_id, rating);
             fgets(input, 20, stdin);
         } else if (strcmp(array[0], "RATING") == 0) {
             sscanf(array[1], "%d", &user_id);
@@ -182,10 +187,10 @@ int main() {
             sscanf(array[2], "%d", &item_id);
             deleteNode(&head, user_id, item_id);
             fgets(input, 20, stdin);
-        } else if (strcmp(array[0], "BREAK") == 0) {
+        } else if (strcmp(array[0], "break") == 0) {
             break;
         }
-        //DEBUG
+            //DEBUG
         else if (strcmp(array[0], "PRINT") == 0) {
             printList(head);
             fgets(input, 20, stdin);
