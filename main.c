@@ -157,7 +157,7 @@ int main() {
     double rating;
 
     while (1) {
-        scanf("%19[^\n]", &input);
+        scanf("%19[^\n]", input);
         char *p = strtok(input, " ");
         char *array[4];
         int i = 0;
